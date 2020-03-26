@@ -1,36 +1,3 @@
-# Using the PulseAudio API to change default audio devices on Linux
-
-The PulseAudio API, "documented" [here](https://freedesktop.org/software/pulseaudio/doxygen/index.html), is a confusing mess with a severe lack of practical examples.
-This document serves as a basic example of the API, highlighting basic usage and undocumented gotchas that were discovered.
-
-The examples are primarily focused on changing the default audio device and volume, which is what I needed PulseAudio for.
-
-The examples are C++.
-
-The asynchronous API is used, although since I needed to retrofit the Pulse API onto something based on the Windows API, it effectively needed to be synchronous.
-This is handled through setting the `loopControl` variable in callbacks and the `customPulseLoop` functions.
-
-The actual implemenation this document is based on can be found on the [OpenVR Advanced Settings](https://github.com/OpenVR-Advanced-Settings/OpenVR-AdvancedSettings) repo [here](https://raw.githubusercontent.com/OpenVR-Advanced-Settings/OpenVR-AdvancedSettings/linux-audio-manager/src/tabcontrollers/audiomanager/AudioManagerPulse_internal.h).
-
-## Initial setup
-
-You can import the entire API with `#include <pulse/pulseaudio.h>`, and adding `-lpulse` to GCC/Clang.
-Ubuntu requires the headers from the `libpulse-dev` package.
-
-## Official/Unofficial Documentation
-
-The above documentation doesn't do a good job of linking to the plethora of functions in the API.
-The best way I've found of finding things that I need is by going to [this](https://freedesktop.org/software/pulseaudio/doxygen/volume_8h.html) site and using the sidebar to guess where the things I need might be.
-Google searches with `site:freedesktop.org` appended also work.
-
-Inspecting the source for [pactl](https://github.com/pulseaudio/pulseaudio/blob/master/src/utils/pactl.c) and [pacmd](https://github.com/pulseaudio/pulseaudio/blob/master/src/utils/pacmd.c) was also very helpful.
-
-## "Workable" Example
-
-The example contains a lot of ease of use use functions, and is not really a minimum reproducible example in that sense.
-If you have any questions shoot me an email or open an issue.
-
-```cpp
 #include <pulse/pulseaudio.h>
 #include <string>
 
@@ -241,5 +208,3 @@ int main() {
     customPulseLoop();
 
 }
-```
-
